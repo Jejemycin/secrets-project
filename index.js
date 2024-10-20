@@ -21,7 +21,18 @@ app.use(express.static("public"));
  
 const port = 3000;
 
-
+app.get("/", async (req, res) => {
+    try {
+        const result = await axios.get(API_URL + "/random");
+        const data = {
+            secret : JSON.stringify(result.data.secret),
+            user : JSON.stringify(result.data.user)
+        };
+        res.render("index.ejs", data);
+      } catch (error) {
+        res.render("index.ejs", { content: JSON.stringify(error.response.data) });
+      }
+  }); 
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
